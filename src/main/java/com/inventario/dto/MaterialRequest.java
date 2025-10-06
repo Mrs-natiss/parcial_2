@@ -2,13 +2,6 @@
 // Proyecto: Sistema de Control de Inventario de Material Didáctico
 // Fecha: Octubre 2025
 // DTO para recibir la información mínima al crear un material.
-
-// Autor: Natalia Afanador
-// Proyecto: Sistema de Control de Inventario de Material Didáctico
-// Fecha: Octubre 2025
-// DTO usado para recibir los datos cuando se crea un nuevo material.
-// Evita exponer directamente las entidades y facilita la validación de la entrada.
-
 package com.inventario.dto;
 
 public class MaterialRequest {

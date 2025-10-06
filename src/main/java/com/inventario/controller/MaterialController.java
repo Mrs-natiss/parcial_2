@@ -1,14 +1,5 @@
-// Autor: Natalia Afanador
-// Proyecto: Sistema de Control de Inventario de Material Didáctico
-// Fecha: Octubre 2025
-// Comentario: no añado autenticación por ahora para mantener el ejercicio claro.
-
-// Autor: Natalia Afanador
-// Proyecto: Sistema de Control de Inventario de Material Didáctico
-// Fecha: Octubre 2025
-// Controlador REST que expone los endpoints HTTP.
-// Recibe las peticiones del cliente (Postman, navegador, etc.) y usa el servicio para procesarlas.
-// Es la capa que conecta el frontend con la lógica del sistema.
+// Controlador que maneja las peticiones del usuario.
+// Se comunica con el servicio para crear, listar y actualizar materiales.
 
 package com.inventario.controller;
 
@@ -16,47 +7,43 @@ import com.inventario.dto.MaterialRequest;
 import com.inventario.dto.UpdateQuantityRequest;
 import com.inventario.entities.Material;
 import com.inventario.service.MaterialService;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/materiales")
 public class MaterialController {
+
     private final MaterialService service;
 
     public MaterialController(MaterialService service) {
         this.service = service;
     }
 
+    // Crea un nuevo material
     @PostMapping
-    public ResponseEntity<Material> create(@RequestBody MaterialRequest req) {
-        Material created = service.registerMaterial(req);
-        return ResponseEntity.ok(created);
+    public ResponseEntity<Material> crear(@RequestBody MaterialRequest req) {
+        Material nuevo = service.create(req);
+        return ResponseEntity.ok(nuevo);
     }
 
-    @GetMapping("/activos")
-    public ResponseEntity<List<Material>> getActivos() {
-        return ResponseEntity.ok(service.getActiveMaterials());
-    }
-
-    @PatchMapping("/cantidad")
-    public ResponseEntity<Material> updateQuantity(@RequestBody UpdateQuantityRequest req) {
-        Material updated = service.updateQuantity(req);
-        return ResponseEntity.ok(updated);
-    }
-
+    // Muestra todos los materiales
     @GetMapping
-    public ResponseEntity<List<Material>> getAll() {
-        return ResponseEntity.ok(service.getAllMaterials());
+    public ResponseEntity<List<Material>> listarTodos() {
+        return ResponseEntity.ok(service.getAll());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Material> getById(@PathVariable Long id) {
-        return service.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    // Muestra los materiales activos
+    @GetMapping("/activos")
+    public ResponseEntity<List<Material>> listarActivos() {
+        return ResponseEntity.ok(service.getActive());
+    }
+
+    // Actualiza la cantidad de un material
+    @PatchMapping("/cantidad")
+    public ResponseEntity<Material> actualizarCantidad(@RequestBody UpdateQuantityRequest req) {
+        Material actualizado = service.updateQuantity(req);
+        return ResponseEntity.ok(actualizado);
     }
 }
